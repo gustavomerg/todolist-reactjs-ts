@@ -1,5 +1,27 @@
 import rocketIcon from "./assets/rocket.svg";
 import { LucidePlusCircle, Trash2, Check } from "lucide-react";
+import { TodoItem, TodoItemType } from "./components/TodoItem";
+import { v4 as uuidv4 } from 'uuid';
+
+const todoItems: TodoItemType[] = [
+  {
+    key: uuidv4(),
+    checked: false,
+    content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat illum ipsam tenetur commodi eos esse rerum, veritatis laborum voluptatem eius eveniet quaerat quo dicta natus. Magni odio facilis nostrum neque.',
+  },
+  {
+    key: uuidv4(),
+    checked: false,
+    content: 'Estudar ReacrJS até codar de olhos fechados.',
+  },
+  {
+    key: uuidv4(),
+    checked: true,
+    content: 'Tomar café até desenvolver de ponta cabeça.',
+  },
+]
+
+console.log('Todos os itens: ' + JSON.stringify(todoItems))
 
 function App() {
   return (
@@ -53,15 +75,14 @@ function App() {
           </div>
 
           <div className="flex flex-col gap-3"> {/* Lista de ToDo */}
-            <div className="flex bg-custom-gray-500 border border-custom-gray-400 p-4 gap-3 rounded-[8px]"> {/* Item */}
-              <div>
-                <button type="button" className="w-[17.45px] h-[17.45px] rounded-full border-[2px] flex justify-center items-center m-[3.27px] border-custom-blue hover:border-custom-blue-dark hover:bg-custom-blue-dark/20 outline-none focus-visible:outline-[1.5px] focus-visible:outline-custom-purple-dark" />
-              </div>
-              <span className="text-custom-gray-100 text-sm">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat illum ipsam tenetur commodi eos esse rerum, veritatis laborum voluptatem eius eveniet quaerat quo dicta natus. Magni odio facilis nostrum neque.</span>
-              <button className="w-max h-max outline-none focus-visible:outline-[1.5px] focus-visible:rounded-[4px] focus-visible:outline-custom-purple-dark">
-                <Trash2 className="text-custom-gray-300 box-content p-[5px] hover:text-custom-danger hover:bg-custom-gray-400 rounded-[4px]" size={14}/>
-              </button>
-            </div>
+
+            {todoItems.map(item => {
+              console.log(item)
+              return (
+                <TodoItem key={item.key} item={item} />
+              )
+            })}
+            {/* <TodoItem /> */}
 
             <div className="flex bg-custom-gray-500 border border-custom-gray-400 p-4 gap-3 rounded-[8px]"> {/* Item */}
               <div>
@@ -75,6 +96,7 @@ function App() {
                 <Trash2 className="text-custom-gray-300 box-content p-[5px] hover:text-custom-danger hover:bg-custom-gray-400 rounded-[4px]" size={14}/>
               </button>
             </div>
+
           </div>
         </div>
       </div>
