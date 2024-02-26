@@ -1,9 +1,13 @@
 import rocketIcon from "./assets/rocket.svg";
-import { LucidePlusCircle, Trash2, Check } from "lucide-react";
+import { LucidePlusCircle, Trash2, Check, LucideClipboardX } from "lucide-react";
 import { TodoItem, TodoItemType } from "./components/TodoItem";
 import { v4 as uuidv4 } from 'uuid';
+import { ChangeEvent, FormEvent, useState } from "react";
+import clipboardIcon from "./assets/clipboard.svg"
 
-const todoItems: TodoItemType[] = [
+
+
+/* const todoItems: TodoItemType[] = [
   {
     key: uuidv4(),
     checked: false,
@@ -19,11 +23,93 @@ const todoItems: TodoItemType[] = [
     checked: true,
     content: 'Tomar café até desenvolver de ponta cabeça.',
   },
-]
+] */
 
-console.log('Todos os itens: ' + JSON.stringify(todoItems))
+/* console.log('Todos os itens: ' + JSON.stringify(todoItems)) */
 
 function App() {
+
+  const [todoItems, setTodoItems] = useState<TodoItemType[]>(() => {
+
+    const todoItemsOnStorage = localStorage.getItem('todoItems')
+
+    if (todoItemsOnStorage) {
+      return JSON.parse(todoItemsOnStorage)
+    }
+
+    return []
+  })
+
+  const [content, setContent] = useState('')
+
+  function handleContentChanged (event: ChangeEvent<HTMLInputElement>) {
+    setContent(event.target.value)
+  }
+
+  function handleSaveTodoItem (event: FormEvent) {
+    event.preventDefault()
+
+    if (content == '') {
+      return
+    }
+
+    const newTodoItem: TodoItemType = {
+      key: uuidv4(),
+      checked: false,
+      content
+    }
+
+    const todoItemsArray = [newTodoItem, ...todoItems]
+
+    setTodoItems(todoItemsArray)
+
+    localStorage.setItem('todoItems', JSON.stringify(todoItemsArray))
+
+    setContent('')
+    
+  }
+
+  function onTodoItemCheck (key: string) {
+/*     const todoItemsArray = todoItems.filter(item => {
+      if (item.key == key) {
+        item.checked = !item.checked
+      }
+      return true
+    }) */
+
+    /* Desta forma se mantém imutável */
+
+    const todoItemsArray = todoItems.map(item => {
+      if (item.key == key) {
+        return {
+          ...item,
+          checked: !item.checked
+        }
+      }
+      return item
+    })
+
+    setTodoItems(todoItemsArray)
+
+    localStorage.setItem('todoItems', JSON.stringify(todoItemsArray))
+
+  }
+
+  function onTodoItemDeleted (key: string) {
+    const todoItemsArray = todoItems.filter(item => {
+      return item.key !== key
+    })
+
+    setTodoItems(todoItemsArray)
+
+    localStorage.setItem('todoItems', JSON.stringify(todoItemsArray))
+
+  }
+
+  const todoItemsCount = todoItems.length;
+
+  const todoItemsCheckedCount = todoItems.filter(item => item.checked).length;
+
   return (
     <div>
       <header className="bg-custom-gray-700 h-48 flex justify-center">
@@ -43,9 +129,12 @@ function App() {
             type="text" 
             placeholder="Adicione uma nova tarefa" 
             className="bg-custom-gray-500 text-custom-gray-100 placeholder:text-custom-gray-300 text-base p-4 rounded-lg outline-none flex-1 border-solid border border-custom-gray-700 focus-visible:border-custom-purple-dark"
+            onChange={handleContentChanged}
+            value={content}
             />
           <button 
             className="flex items-center bg-custom-blue-dark text-custom-gray-100 text-sm font-bold p-[15px] space-x-2 rounded-lg hover:bg-custom-blue hover:transition-colors duration-75 outline-none focus-visible:outline-[1.5px] focus-visible:outline-custom-purple-dark"
+            onClick={handleSaveTodoItem}
           >
             <span>Criar</span>
             <div>
@@ -54,14 +143,14 @@ function App() {
           </button>
         </form>
 
-        <div>{/* Body */}
+        <div className="w-full">{/* Body */}
 
           <div className="flex justify-between mb-6"> {/* Informativo */}
             <span className="flex items-center gap-[8px]">
               <strong className="text-sm font-bold text-custom-blue">Tarefas criadas</strong>
               <span 
               className="text-xs font-bold text-custom-gray-200 px-[8px] py-[2px] bg-custom-gray-400 rounded-full">
-                5
+                {todoItemsCount}
               </span>
             </span>
 
@@ -69,33 +158,36 @@ function App() {
             <strong className="text-sm font-bold text-custom-purple">Concluídas</strong>
               <span 
               className="text-xs font-bold text-custom-gray-200 px-[8px] py-[2px] bg-custom-gray-400 rounded-full">
-                2 de 5
+                {todoItemsCount > 0 
+                ?
+                `${todoItemsCheckedCount} de ${todoItemsCount}`
+                :
+                todoItemsCount
+                }
+                
               </span>
             </span>
           </div>
 
-          <div className="flex flex-col gap-3"> {/* Lista de ToDo */}
-
-            {todoItems.map(item => {
-              console.log(item)
+          <div className="flex flex-col gap-3 mb-6"> {/* Lista de ToDo */}
+            {todoItemsCount > 0 
+            ?             
+            todoItems.map(item => {
               return (
-                <TodoItem key={item.key} item={item} />
+                <TodoItem key={item.key} item={item} onTodoItemCheck={onTodoItemCheck} onTodoItemDeleted={onTodoItemDeleted} />
               )
-            })}
-            {/* <TodoItem /> */}
-
-            <div className="flex bg-custom-gray-500 border border-custom-gray-400 p-4 gap-3 rounded-[8px]"> {/* Item */}
-              <div>
-                
-                <button type="button" className="w-[17.45px] h-[17.45px] rounded-full border-[2px] flex justify-center items-center m-[3.27px] border-custom-purple-dark bg-custom-purple-dark hover:bg-custom-purple hover:border-custom-purple transition-colors duration-75 outline-none focus-visible:outline-[1.5px] focus-visible:outline-custom-purple-dark" >
-                  <Check size={10} className="text-custom-gray-100 stroke-[3]"/>
-                </button>
+            }) 
+            : 
+            <div className="flex flex-col items-center gap-4 border-t-[1.5px] border-t-custom-gray-400 rounded-t-lg">
+              <img className="mt-16" src={clipboardIcon} />
+              <div className="text-custom-gray-300 text-base">
+                <p><strong className="text-custom-gray-300">Você ainda não tem tarefas cadastradas</strong></p>
+                <p>Crie tarefas e organize seus itens a fazer</p>
               </div>
-              <span className="text-custom-gray-300 text-sm line-through">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat illum ipsam tenetur commodi eos esse rerum, veritatis laborum voluptatem eius eveniet quaerat quo dicta natus. Magni odio facilis nostrum neque.</span>
-              <button className="w-max h-max outline-none focus-visible:outline-[1.5px] focus-visible:rounded-[4px] focus-visible:outline-custom-purple-dark">
-                <Trash2 className="text-custom-gray-300 box-content p-[5px] hover:text-custom-danger hover:bg-custom-gray-400 rounded-[4px]" size={14}/>
-              </button>
+              
             </div>
+            }
+
 
           </div>
         </div>
