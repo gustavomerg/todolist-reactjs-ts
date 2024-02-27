@@ -16,6 +16,8 @@ Including:
  - [NodeJS](https://nodejs.org/en/)
  - [TailwindCSS ](https://tailwindcss.com/)
  - [lucide-icons](https://lucide.dev/)
+ - [react-toastify](https://www.npmjs.com/package/react-toastify?activeTab=readme)
+ - [localStorage](https://caniuse.com/?search=localstorage)
 
 
 ## Demo

@@ -10,4 +10,5 @@
 
 html {
   /* font-size: 80%; */
+  min-width: 392px;
 }

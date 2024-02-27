@@ -137,7 +137,7 @@ function App() {
         </div>
       </header>
 
-      <div className="flex items-center flex-col max-w-5xl mx-auto px-5">{/* corpo */}
+      <div className="flex items-center flex-col max-w-5xl mx-auto px-5 min-w-[392px]">{/* corpo */}
         <form action="" className="w-full flex gap-2 mt-[-1.8rem] mb-16">
           <input 
             alt="Campo para adicionar nova tarefa"
