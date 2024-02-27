@@ -1,11 +1,13 @@
 
 # About
 
-ReactJS application, regarding a social network interface.
+ReactJS + TS application, regarding a ToDo List.
 
 Including:
-- Posts
-- Comments
+- Add Item
+- Mark the item as done
+- Remove the item
+- LocalStorage
 
 
 
@@ -31,7 +33,7 @@ https://github.com/gustavomerg/todolist-reactjs-ts/assets/49318844/9ac301d1-e55f
 
 To clone the application
 ```bash
-  git clone git@github.com:gustavomerg/reactjs-social-posts.git
+    git clone git@github.com:gustavomerg/todolist-reactjs-ts.git
 ```
 
 If you don't have npm installed
