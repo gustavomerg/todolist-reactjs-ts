@@ -22,7 +22,9 @@ Including:
 
 ## Demo
 
-https://github.com/gustavomerg/reactjs-notes-with-audio/assets/49318844/9fc655bc-b303-4dc2-868d-66336ee2afdb
+https://github.com/gustavomerg/todolist-reactjs-ts/assets/49318844/9ac301d1-e55f-4eb7-87e1-3aa2a0788592
+
+
 
 
 ## Running the application
