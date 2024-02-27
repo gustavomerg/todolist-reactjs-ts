@@ -4,6 +4,8 @@ import { TodoItem, TodoItemType } from "./components/TodoItem";
 import { v4 as uuidv4 } from 'uuid';
 import { ChangeEvent, FormEvent, useState } from "react";
 import clipboardIcon from "./assets/clipboard.svg"
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -65,6 +67,12 @@ function App() {
 
     localStorage.setItem('todoItems', JSON.stringify(todoItemsArray))
 
+    toast.success("Tarefa criada!", {
+      theme: "dark",
+      draggable: "mouse",
+      autoClose: 3000
+    })
+
     setContent('')
     
   }
@@ -104,6 +112,12 @@ function App() {
 
     localStorage.setItem('todoItems', JSON.stringify(todoItemsArray))
 
+    toast.success("Tarefa removida!", {
+      theme: "dark",
+      draggable: "mouse",
+      autoClose: 3000
+    })
+
   }
 
   const todoItemsCount = todoItems.length;
@@ -112,6 +126,7 @@ function App() {
 
   return (
     <div>
+      <ToastContainer stacked/>
       <header className="bg-custom-gray-700 h-48 flex justify-center">
         <div className="flex items-center gap-3">
           <img className="pt-2.5 pb-0.5" src={rocketIcon} />
